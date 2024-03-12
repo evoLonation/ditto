@@ -22,6 +22,8 @@ class Client(object):
 
         self.train_samples = len(self.train_data['y'])
         self.val_samples = len(self.val_data['y'])
+        # print(f"test_samples: {len(self.test_data['x'])}, {len(self.test_data['y'])}")
+        # print(f"ys: {self.test_data['y']}")
         self.test_samples = len(self.test_data['y'])
 
     def set_params(self, model_params):
@@ -100,6 +102,16 @@ class Client(object):
             test_samples: int
         '''
         tot_correct, loss = self.model.test(self.test_data)
+        return tot_correct, loss, self.test_samples
+
+    def bootstrap(self):
+        bootstrap_indices = np.random.choice(a = self.test_samples, size= self.test_samples, replace=True)
+        bootstrap_test_data = {
+            'x': [self.test_data['x'][i] for i in bootstrap_indices],
+            'y': [self.test_data['y'][i] for i in bootstrap_indices],
+        }
+        assert len(bootstrap_test_data['x']) == self.test_samples
+        tot_correct, loss = self.model.test(bootstrap_test_data)
         return tot_correct, loss, self.test_samples
 
     def validate(self):

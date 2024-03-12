@@ -158,6 +158,10 @@ def read_options():
                         help='learning rate decay for finetuning',
                         type=float,
                         default=1.0) # don't decay
+    parser.add_argument('--num_bootstrap', 
+                        help='number of bootstrap',
+                        type=int,
+                        default=0)
 
     try:
         parsed = vars(parser.parse_args())

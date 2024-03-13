@@ -8,6 +8,7 @@ from flearn.utils.tf_utils import process_grad, cosine_sim, softmax, norm_grad, 
 from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch, gen_batch_celeba
 from flearn.utils.language_utils import letter_to_vec, word_to_indices
 
+from openpyxl import Workbook
 
 def process_x(raw_x_batch):
     x_batch = [word_to_indices(word) for word in raw_x_batch]
@@ -66,6 +67,7 @@ class Server(BaseFedarated):
                     tmp_models.append(self.local_models[idx])
 
                 num_train, num_correct_train, loss_vector = self.train_error(tmp_models)
+                print(f"loss_vector: {loss_vector[loss_vector > 10]}")
                 avg_train_loss = np.dot(loss_vector, num_train) / np.sum(num_train)
                 num_test, num_correct_test, _ = self.test(tmp_models)
                 tqdm.write('At round {} training accu: {}, loss: {}'.format(i, np.sum(num_correct_train) * 1.0 / np.sum(num_train), avg_train_loss))
@@ -167,4 +169,17 @@ class Server(BaseFedarated):
             # update the global model
             for layer in range(len(avg_updates)):
                 self.global_model[layer] += avg_updates[layer]
+
+        bootstrap_content = []
+        for i in range(self.num_bootstrap):
+            accs = self.bootstrap()
+            bootstrap_content.append(accs)
+            tqdm.write('Bootstrap accus: {}'.format(accs))
+        if len(bootstrap_content) != 0:
+            wb = Workbook()
+            ws = wb.active
+            ws.append([f"client_{i}" for i in range(len(bootstrap_content[0]))])
+            for accs in bootstrap_content:
+                ws.append(accs)
+            wb.save("bootstrap.xlsx")
 

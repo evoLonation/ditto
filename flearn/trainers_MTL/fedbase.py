@@ -74,9 +74,10 @@ class BaseFedarated(object):
             losses.append(cl * 1.0)
         return np.array(num_samples), np.array(tot_correct), np.array(losses)
     
-    def bootstrap(self):
+    def bootstrap(self, models):
         accs = []
-        for c in self.clients:
+        for idx, c in enumerate(self.clients):
+            self.client_model.set_params(models[idx])
             ct, cl, ns = c.bootstrap()
             accuracy = ct*1.0/ns
             accs.append(accuracy)

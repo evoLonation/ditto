@@ -154,5 +154,5 @@ class Server(BaseFedarated):
             for accs in bootstrap_content:
                 ws.append(accs)
             save_path = os.path.join("bootstrap", self.bootstrap_file)
-            os.makedirs(save_path, exist_ok=True) 
+            os.makedirs("bootstrap", exist_ok=True) 
             wb.save(save_path)

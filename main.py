@@ -162,6 +162,10 @@ def read_options():
                         help='number of bootstrap',
                         type=int,
                         default=0)
+    parser.add_argument('--bootstrap_file', 
+                        help='file of bootstrap',
+                        type=str,
+                        default='bootstrap.xlsx')
 
     try:
         parsed = vars(parser.parse_args())

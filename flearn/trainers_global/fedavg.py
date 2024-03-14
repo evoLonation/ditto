@@ -9,6 +9,7 @@ from flearn.utils.model_utils import batch_data, gen_batch, gen_epoch, gen_batch
 from flearn.utils.language_utils import letter_to_vec, word_to_indices
 
 from openpyxl import Workbook
+import os
 
 def process_x(raw_x_batch):
     x_batch = [word_to_indices(word) for word in raw_x_batch]
@@ -145,11 +146,13 @@ class Server(BaseFedarated):
         for i in range(self.num_bootstrap):
             accs = self.bootstrap()
             bootstrap_content.append(accs)
-            tqdm.write('Bootstrap accus: {}'.format(accs))
+            tqdm.write(f"Bootstrap round: {i}")
         if len(bootstrap_content) != 0:
             wb = Workbook()
             ws = wb.active
             ws.append([f"client_{i}" for i in range(len(bootstrap_content[0]))])
             for accs in bootstrap_content:
                 ws.append(accs)
-            wb.save("bootstrap.xlsx")
+            save_path = os.path.join("bootstrap", self.bootstrap_file)
+            os.makedirs(save_path, exist_ok=True) 
+            wb.save(save_path)

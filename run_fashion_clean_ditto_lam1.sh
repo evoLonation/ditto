@@ -27,4 +27,5 @@ python3  -u main.py --dataset=fmnist \
             --finetune_iters=40 \
             --decay_factor=1 \
             --local_iters=2 \
-            --num_bootstrap=100
+            --num_bootstrap=100 \
+            --bootstrap_file=$1

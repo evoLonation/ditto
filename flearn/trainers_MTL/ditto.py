@@ -61,7 +61,7 @@ class Server(BaseFedarated):
                 batches[c] = gen_batch(c.train_data, self.batch_size, self.num_rounds * self.local_iters)
 
 
-        for i in range(self.num_rounds):
+        for i in range(1, self.num_rounds + 1):
 
             # weighted sampling
             indices, selected_clients = self.select_clients(round=i, num_clients=self.clients_per_round)

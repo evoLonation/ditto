@@ -149,3 +149,10 @@ class Model(object):
 
     def close(self):
         self.sess.close()
+
+    def save(self, path):
+        with self.graph.as_default():
+            # builder = tf.saved_model.builder.SavedModelBuilder(path)
+            # builder.add_meta_graph_and_variables(sess=self.sess, tags=['serve'])
+            # builder.save()
+            tf.saved_model.simple_save(self.sess, path, inputs={'features': self.features}, outputs={'softmax_tensor': self.predictions})

@@ -172,6 +172,9 @@ class Server(BaseFedarated):
                 tqdm.write("At round {} clients test accu: {}".format(i, (num_correct_test / num_test).tolist()))
                 print("variance of the performance: ", np.var(num_correct_test[non_corrupt_id] / num_test[non_corrupt_id]))
 
+        self.save(tmp_models)
+        return
+
         bootstrap_content = []
         for i in range(self.num_bootstrap):
             accs = self.bootstrap(tmp_models)

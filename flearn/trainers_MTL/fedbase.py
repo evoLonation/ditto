@@ -82,6 +82,11 @@ class BaseFedarated(object):
             accuracy = ct*1.0/ns
             accs.append(accuracy)
         return accs
+    
+    def save(self, models):
+        for idx, c in enumerate(self.clients):
+            self.client_model.set_params(models[idx])
+            self.client_model.save(f'saved_model/saved_model_{idx}')
 
     def validate(self):
         '''tests self.latest_model on given clients
@@ -96,9 +101,6 @@ class BaseFedarated(object):
             num_samples.append(ns)
         return np.array(num_samples), np.array(tot_correct)
 
-
-    def save(self):
-        pass
 
     def select_clients(self, round, num_clients=20):
         '''selects num_clients clients weighted by number of samples from possible_clients

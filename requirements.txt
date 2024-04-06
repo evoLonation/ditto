@@ -1,7 +1,8 @@
-numpy
+tensorflow==1.15.0
+# tensorflow-gpu==1.15.0
 scipy
-tensorflow-gpu==1.10
 Pillow
 matplotlib
 tqdm
-cvxopt
+openpyxl
+# cvxopt install by conda
